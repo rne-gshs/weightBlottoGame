@@ -100,19 +100,22 @@ void makeset(std::vector<std::vector<uint32_t>>& v, uint32_t con_size, uint32_t 
 
 int main(int argc, char* argv[])
 {
-	uint32_t constituency_size, citizen_size, citizen_sum = 0, argCount = 0;
+	uint32_t constituency_size, citizen_size, argCount = 0;
 	uint32_t testPerRepeat, testCount;
 	double lambda;
 	std::vector<uint32_t> partyRuling;
 
 	/* constituency_size : 지역구 수
 	 * citizen_size : 투입 자원 수
+	 * testCount : 사이클 수
+	 * testPerRepeat : 사이클당 실행 수
 	 * EC array : 지역구별 선거인단 수
 	 */
-	if(argc == 4)
+	if(argc == 5)
 	{
 		constituency_size = std::stoul(argv[argCount++]);
 		citizen_size = std::stoul(argv[argCount++]);
+		lambda = std::stod(argv[argCount++]);
 
 		testCount = std::stoul(argv[argCount++]);
 		testPerRepeat = std::stoul(argv[argCount++]);
