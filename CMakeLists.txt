@@ -3,7 +3,15 @@ project(blottoGame)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_compile_options(-O3 -march=alderlake)
+if(NOT MSVC)
+    add_compile_options(-O3)
+endif()
+
+set(CMAKE_MODULE_PATH
+        ${CMAKE_MODULE_PATH}
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+include(OptimizeForArchitecture)
 
 #[[find_package(OpenMP)
 if (OPENMP_FOUND)
