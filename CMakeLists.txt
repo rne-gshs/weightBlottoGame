@@ -3,9 +3,9 @@ project(blottoGame)
 
 set(CMAKE_CXX_STANDARD 20)
 
-if(NOT MSVC)
-    add_compile_options(-O3)
-endif()
+add_compile_options(-O3)
+# add_compile_options(-march=alderlake)
+# add_compile_options(-march=icelake-server)
 
 set(CMAKE_MODULE_PATH
         ${CMAKE_MODULE_PATH}
