@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <utility>
 #include <vector>
+#include <array>
 #include <map>
 #include <string>
 #include <cstdint>
@@ -167,7 +168,7 @@ namespace db
 			return vc[x_ptr - 1];
 		}
 
-		std::vector<std::pair<std::vector<std::uint32_t>, double>> write()
+		std::vector<std::tuple<std::vector<std::uint32_t>, std::array<std::uint32_t, 3>, double>> write()
 		{
 			struct vectorContainer
 			{
@@ -191,7 +192,14 @@ namespace db
 			auto comp = [](auto &a, auto &b)->bool{return !(a.w < b.w);};
 			std::sort(originalBuffer.begin(), originalBuffer.end(), comp);
 
-			std::vector<std::pair<std::vector<std::uint32_t>, double>> buffer;
+			std::vector<std::tuple<std::vector<std::uint32_t>, std::array<std::uint32_t, 3>, double>> buffer;
+
+			for(auto &i:originalBuffer)
+				buffer.emplace_back(i.vec, std::array<std::uint32_t, 3>{i.w.win, i.w.draw, i.w.lose}, i.P / psum);
+
+			return buffer;
+
+			/*std::vector<std::pair<std::vector<std::uint32_t>, double>> buffer;
 			for(auto &i:originalBuffer)
 			{
 				buffer.emplace_back(i.vec, i.P / psum);
@@ -200,7 +208,7 @@ namespace db
 				buffer.back().first.emplace_back(i.w.lose);
 			}
 
-			return buffer;
+			return buffer;*/
 		}
 
 		void setLambda(const double l) { lambda = l; }

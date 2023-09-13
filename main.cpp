@@ -7,7 +7,7 @@
 #include "blotto.h"
 #include "database.h"
 
-void readDB(db::chainDataBase& originalDB, std::string _fileName, uint32_t constituency_size)
+void readDB(db::chainDataBase& originalDB, const std::string _fileName, uint32_t constituency_size)
 {
 	std::ifstream read;
 	read.open(_fileName);
@@ -17,7 +17,6 @@ void readDB(db::chainDataBase& originalDB, std::string _fileName, uint32_t const
 		std::cerr << "File No Exist " << _fileName << std::endl;
 		exit(2);
 	}
-
 	while(!read.eof())
 	{
 		std::vector<uint32_t> _v;
@@ -49,14 +48,13 @@ void writeDB(db::chainDataBase& originalDB, uint32_t constituency_size, uint32_t
 		exit(3);
 	}
 
-	auto _DB = originalDB.write();
-	for(auto &i:_DB)
+	auto DB = originalDB.write();
+	for(auto &i:DB)
 	{
-		int sz = i.first.size() - 3;
-		for(int j = 0; j < sz; j++)
-			write << i.first[j] << " ";
-		auto p = i.first.end();
-		write << "win: " << *(p - 3) << " draw: " << *(p - 2) << " lose: " << *(p - 1) << " val: " << i.second << std::endl;
+		auto [elec, wdl, val] = i;
+		for(auto& j:elec)
+			write << j << " ";
+		write << "win: " << wdl[0] << " draw: " << wdl[1] << " lose: " << wdl[2] << " val: " << val << std::endl;
 	}
 }
 void readECset(std::vector<uint32_t>& v, uint32_t co_size)
@@ -107,6 +105,7 @@ int main(int argc, char* argv[])
 
 	/* constituency_size : 지역구 수
 	 * citizen_size : 투입 자원 수
+	 * lambda : 진짜 람다 ㅅㄱ
 	 * testCount : 사이클 수
 	 * testPerRepeat : 사이클당 실행 수
 	 * EC array : 지역구별 선거인단 수
