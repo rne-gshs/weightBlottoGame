@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
 
 	for(int tcnt = 1; tcnt <= testCount; tcnt++)
 	{
-		std::cerr << "Remain Epoch " << tcnt << std::endl;
+		std::cerr << "Now Epoch " << tcnt << " / " << testCount << std::endl;
 		auto startTime = std::chrono::high_resolution_clock::now();
 		db::chainDataBase newDB(lambda);
 
