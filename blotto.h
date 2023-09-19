@@ -10,10 +10,10 @@
 
 namespace blt
 {
-	void gen(uint32_t, uint32_t, std::vector<uint32_t>&);
+	void gen(uint64_t, uint64_t, std::vector<uint64_t>&);
 
-	int32_t game(std::vector<uint32_t>&, std::vector<uint32_t>&);
-	int32_t game(std::vector<uint32_t>&, std::vector<uint32_t>&, std::vector<uint32_t>&);
+	int32_t game(std::vector<uint64_t>&, std::vector<uint64_t>&);
+	int32_t game(std::vector<uint64_t>&, std::vector<uint64_t>&, std::vector<uint64_t>&);
 } // blt
 
 #endif //_BLOTTO_H_

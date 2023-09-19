@@ -7,7 +7,7 @@
 #include "blotto.h"
 #include "database.h"
 
-void readDB(db::chainDataBase& originalDB, const std::string _fileName, uint32_t constituency_size)
+void readDB(db::chainDataBase& originalDB, const std::string _fileName, uint64_t constituency_size)
 {
 	std::ifstream read;
 	read.open(_fileName);
@@ -19,7 +19,7 @@ void readDB(db::chainDataBase& originalDB, const std::string _fileName, uint32_t
 	}
 	while(!read.eof())
 	{
-		std::vector<uint32_t> _v;
+		std::vector<uint64_t> _v;
 		for(unsigned int i = 0; i < constituency_size; i++)
 		{
 			unsigned int _a;
@@ -35,7 +35,7 @@ void readDB(db::chainDataBase& originalDB, const std::string _fileName, uint32_t
 		originalDB.push(w, d, l, _v);
 	}
 }
-void writeDB(db::chainDataBase& originalDB, uint32_t constituency_size, uint32_t citizen_size, double lambda, uint32_t rp, uint32_t gcnt)
+void writeDB(db::chainDataBase& originalDB, uint64_t constituency_size, uint64_t citizen_size, double lambda, uint64_t rp, uint64_t gcnt)
 {
 	std::ofstream write;
 	char p[1000];
@@ -48,7 +48,9 @@ void writeDB(db::chainDataBase& originalDB, uint32_t constituency_size, uint32_t
 		exit(3);
 	}
 
-	auto DB = originalDB.write();
+	std::vector<std::tuple<std::vector<std::uint64_t>, std::array<std::uint64_t, 3>, double>> DB;
+	originalDB.write(DB);
+	// auto DB = originalDB.write();
 	for(auto &i:DB)
 	{
 		auto [elec, wdl, val] = i;
@@ -57,7 +59,7 @@ void writeDB(db::chainDataBase& originalDB, uint32_t constituency_size, uint32_t
 		write << "win: " << wdl[0] << " draw: " << wdl[1] << " lose: " << wdl[2] << " val: " << val << std::endl;
 	}
 }
-void readECset(std::vector<uint32_t>& v, uint32_t co_size)
+void readECset(std::vector<uint64_t>& v, uint64_t co_size)
 {
 	v.resize(co_size);
 	std::ifstream read;
@@ -71,11 +73,11 @@ void readECset(std::vector<uint32_t>& v, uint32_t co_size)
 
 	for(auto& i:v) read >> i;
 }
-void makeset(std::vector<std::vector<uint32_t>>& v, uint32_t con_size, uint32_t citizen_size)
+void makeset(std::vector<std::vector<uint64_t>>& v, uint64_t con_size, uint64_t citizen_size)
 {
-	std::vector<uint32_t> a;
+	std::vector<uint64_t> a;
 
-	std::function<void(uint32_t)> f = [&](uint32_t c) -> void
+	std::function<void(uint64_t)> f = [&](uint64_t c) -> void
 	{
 		if(a.size() == con_size - 1)
 		{
@@ -85,7 +87,7 @@ void makeset(std::vector<std::vector<uint32_t>>& v, uint32_t con_size, uint32_t 
 			return;
 		}
 
-		for(uint32_t i = 0; i <= (citizen_size - c); i++)
+		for(uint64_t i = 0; i <= (citizen_size - c); i++)
 		{
 			a.emplace_back(i);
 			f(c + i);
@@ -98,10 +100,10 @@ void makeset(std::vector<std::vector<uint32_t>>& v, uint32_t con_size, uint32_t 
 
 int main(int argc, char* argv[])
 {
-	uint32_t constituency_size, citizen_size, argCount = 0;
-	uint32_t testPerRepeat, testCount;
+	uint64_t constituency_size, citizen_size, argCount = 0;
+	uint64_t testPerRepeat, testCount;
 	double lambda;
-	std::vector<uint32_t> partyRuling;
+	std::vector<uint64_t> partyRuling;
 
 	/* constituency_size : 지역구 수
 	 * citizen_size : 투입 자원 수
@@ -125,7 +127,7 @@ int main(int argc, char* argv[])
 		std::cin >> testCount >> testPerRepeat;
 	}
 
-	std::vector<uint32_t> ec;
+	std::vector<uint64_t> ec;
 	readECset(ec, constituency_size);
 
 	db::chainDataBase originalDB;
@@ -133,7 +135,7 @@ int main(int argc, char* argv[])
 
 	std::cerr << "Read Complete" << std::endl;
 
-	std::vector<std::vector<uint32_t>> s;
+	std::vector<std::vector<uint64_t>> s;
 	makeset(s, constituency_size, citizen_size);
 
 	for(int tcnt = 1; tcnt <= testCount; tcnt++)
@@ -146,12 +148,12 @@ int main(int argc, char* argv[])
 		for(int i = 0; i < sz; i++)
 		{
 			partyRuling = s[i];
-			std::array<uint32_t, 3> r{};
+			std::array<uint64_t, 3> r{};
 			r.fill(0);
 
 			for(int j = 0; j < testPerRepeat; j++)
 			{
-				std::vector<uint32_t> partyOppo = originalDB.getTarget();
+				std::vector<uint64_t> partyOppo = originalDB.getTarget();
 				int32_t _result = blt::game(partyRuling, partyOppo, ec);
 				if(_result == 0) r[1]++;
 				else if(_result > 0) r[0]++;

@@ -16,7 +16,7 @@ std::mt19937 mt_engine(rd());
 namespace blt
 {
 	// 제너레이터
-	void gen(uint32_t n, uint32_t k, std::vector<uint32_t> &b) // 1000
+	void gen(uint64_t n, uint64_t k, std::vector<uint64_t> &b) // 1000
 	{
 		b.resize(n);
 		std::vector<bool> v(n+k-1, false);
@@ -24,8 +24,8 @@ namespace blt
 		//std::fill(v.begin() + k, v.end(), false);
 		std::shuffle(v.begin(), v.end(), mt_engine);
 
-		uint32_t cnt = 0, idx = 0, sz = v.size();
-		for(uint32_t i = 0; i < sz; i++)
+		uint64_t cnt = 0, idx = 0, sz = v.size();
+		for(uint64_t i = 0; i < sz; i++)
 		{
 			if(v[i])
 				cnt++;
@@ -39,9 +39,9 @@ namespace blt
 	}
 
 	// 게임 진행
-	int32_t game(std::vector<uint32_t>& a, std::vector<uint32_t>& b) // 2000
+	int32_t game(std::vector<uint64_t>& a, std::vector<uint64_t>& b) // 2000
 	{
-		uint32_t sz = a.size();
+		uint64_t sz = a.size();
 		if(sz != b.size())
 		{
 			std::cerr << "blt::game" << std::endl;
@@ -49,9 +49,9 @@ namespace blt
 			exit(2000);
 		}
 
-		std::array<uint32_t, 3> w{};
+		std::array<uint64_t, 3> w{};
 		//w[2]: win, w[1]: draw, w[0]:lose
-		for(uint32_t i = 0; i < sz; i++)
+		for(uint64_t i = 0; i < sz; i++)
 		{
 			int64_t t = (int64_t)a[i] - (int64_t)b[i];
 
@@ -62,9 +62,9 @@ namespace blt
 
 		return (int32_t)(w[2] - w[0]);
 	}
-	int32_t game(std::vector<uint32_t>& a, std::vector<uint32_t>& b, std::vector<uint32_t>& ec) // 2000
+	int32_t game(std::vector<uint64_t>& a, std::vector<uint64_t>& b, std::vector<uint64_t>& ec) // 2000
 	{
-		uint32_t sz = a.size();
+		uint64_t sz = a.size();
 		if(sz != b.size() || sz != ec.size())
 		{
 			std::cerr << "blt::game" << std::endl;
@@ -72,9 +72,9 @@ namespace blt
 			exit(2000);
 		}
 
-		std::array<uint32_t, 3> w{};
+		std::array<uint64_t, 3> w{};
 		//w[2]: win, w[1]: draw, w[0]:lose
-		for(uint32_t i = 0; i < sz; i++)
+		for(uint64_t i = 0; i < sz; i++)
 		{
 			int64_t t = (int64_t)a[i] - (int64_t)b[i];
 
