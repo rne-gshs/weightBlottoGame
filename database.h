@@ -68,7 +68,7 @@ namespace db
 		std::vector<std::vector<std::uint64_t>> vc;
 
 		std::map<std::vector<uint64_t>, wdl> DB_vecToWdl;
-		bool isChanged;
+		bool isChanged = false;
 
 	 public:
 		chainDataBase()
@@ -189,19 +189,22 @@ namespace db
 			std::vector<vectorContainer> originalBuffer;
 			for(auto& i:DB_vecToWdl)
 			{
-				double s = i.second.sum_wdl();
-				double p = pow(E, lambda * (i.second.win / s));
+				auto s = (double)i.second.sum_wdl();
+				double p = pow(E, lambda * ((double)i.second.win / s));
 				psum += p;
 				originalBuffer.emplace_back(i.first, i.second, p);
 			}
 
-			auto comp = [](auto &a, auto &b)->bool{return !(a.w < b.w);};
-			std::sort(originalBuffer.begin(), originalBuffer.end(), comp);
+			/*auto comp = [](auto &a, auto &b)->bool{return !(a.w < b.w);};
+			std::sort(originalBuffer.begin(), originalBuffer.end(), comp);*/
 
 			// std::vector<std::tuple<std::vector<std::uint64_t>, std::array<std::uint64_t, 3>, double>> buffer;
 
 			for(auto &i:originalBuffer)
 				DB.emplace_back(std::move(i.vec), std::array<std::uint64_t, 3>{i.w.win, i.w.draw, i.w.lose}, i.P / psum);
+
+			auto comp = [](auto &a, auto &b)->bool{return std::get<1>(a)[0] > std::get<1>(b)[0];};
+			std::sort(DB.begin(), DB.end(), comp);
 
 			// return buffer;
 

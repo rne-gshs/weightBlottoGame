@@ -51,9 +51,9 @@ void writeDB(db::chainDataBase& originalDB, uint64_t constituency_size, uint64_t
 	std::vector<std::tuple<std::vector<std::uint64_t>, std::array<std::uint64_t, 3>, double>> DB;
 	originalDB.write(DB);
 	// auto DB = originalDB.write();
-	for(auto &i:DB)
+	for(auto& i:DB)
 	{
-		auto [elec, wdl, val] = i;
+		auto& [elec, wdl, val] = i;
 		for(auto& j:elec)
 			write << j << " ";
 		write << "win: " << wdl[0] << " draw: " << wdl[1] << " lose: " << wdl[2] << " val: " << val << std::endl;
