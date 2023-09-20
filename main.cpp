@@ -39,7 +39,7 @@ void writeDB(db::chainDataBase& originalDB, uint64_t constituency_size, uint64_t
 {
 	std::ofstream write;
 	char p[1000];
-	sprintf(p, "result/result_%d_%d_%.04lf_%d_%d.txt", constituency_size, citizen_size, lambda, rp, gcnt);
+	sprintf(p, "result/result_%lld_%lld_%.04lf_%lld_%lld.txt", constituency_size, citizen_size, lambda, rp, gcnt);
 	write.open(p);
 
 	if(!write.is_open())
